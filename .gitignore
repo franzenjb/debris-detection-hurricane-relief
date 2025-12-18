@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Output files (large - don't commit)
+output/
+test_output/
+debris_output/
+*.tif
+*.geotiff
+*.shp
+*.shx
+*.dbf
+*.prj
+
+# Model weights (very large - don't commit)
+*.pth
+*.pt
+*.onnx
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

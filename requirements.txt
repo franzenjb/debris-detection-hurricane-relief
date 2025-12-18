@@ -1,0 +1,20 @@
+# Debris Detection for Hurricane Relief
+# SamGeo with text-prompt support for debris identification
+
+# Core package with text prompt capability (includes Grounding DINO)
+segment-geospatial[text]
+
+# Alternative: Full installation with all models
+# segment-geospatial[all]
+
+# Mapping and visualization
+folium>=0.14.0
+geopandas>=0.14.0
+
+# For accessing NOAA/Maxar imagery from AWS
+boto3>=1.28.0
+
+# Jupyter support (optional - for interactive development)
+jupyterlab>=4.0.0
+ipywidgets>=8.0.0
+leafmap>=0.30.0
