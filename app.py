@@ -15,68 +15,85 @@ st.set_page_config(
     layout="wide"
 )
 
-# Simple, high-contrast CSS
+# BULLETPROOF high-contrast CSS - works in light AND dark mode
 st.markdown("""
 <style>
-    /* Force dark text everywhere */
-    * { color: #1a1a1a !important; }
+    /* Force light theme */
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+        background-color: #ffffff !important;
+    }
 
-    /* Red header */
+    /* ALL text must be dark */
+    body, p, span, div, label, h1, h2, h3, h4, h5, h6,
+    .stMarkdown, .stMarkdown p, .stMarkdown span,
+    [data-testid="stMarkdownContainer"],
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] span {
+        color: #000000 !important;
+    }
+
+    /* Red header - WHITE text */
     .header {
-        background: #c62828;
-        color: white !important;
+        background: #c62828 !important;
         padding: 20px;
         border-radius: 8px;
         margin-bottom: 20px;
     }
-    .header h1, .header p { color: white !important; margin: 0; }
-    .header h1 { font-size: 28px; margin-bottom: 8px; }
+    .header h1 { color: #ffffff !important; font-size: 28px; margin: 0 0 8px 0; }
+    .header p { color: #ffffff !important; margin: 0; }
 
-    /* Warning box */
+    /* Warning box - BLACK text on YELLOW */
     .warning {
-        background: #fff3cd;
+        background: #fff3cd !important;
         border: 2px solid #ffc107;
         border-radius: 8px;
         padding: 16px;
         margin: 16px 0;
     }
-    .warning strong { color: #856404 !important; }
-    .warning a { color: #0066cc !important; }
+    .warning, .warning strong, .warning span, .warning p {
+        color: #000000 !important;
+    }
+    .warning a { color: #0000cc !important; text-decoration: underline; }
 
-    /* Section headers */
+    /* Section headers - WHITE text on DARK */
     .section {
-        background: #333;
-        color: white !important;
+        background: #222222 !important;
         padding: 12px 16px;
         border-radius: 6px;
         margin: 16px 0 12px 0;
         font-weight: bold;
         font-size: 16px;
     }
-    .section * { color: white !important; }
+    .section, .section * { color: #ffffff !important; }
 
-    /* Info box */
+    /* Info box - BLACK text on LIGHT BLUE */
     .info {
-        background: #e7f3ff;
-        border: 2px solid #0066cc;
+        background: #cce5ff !important;
+        border: 2px solid #004085;
         border-radius: 8px;
         padding: 16px;
         margin: 12px 0;
     }
+    .info, .info strong, .info span, .info p, .info br {
+        color: #000000 !important;
+    }
 
-    /* Success box */
+    /* Success box - BLACK text on LIGHT GREEN */
     .success {
-        background: #d4edda;
+        background: #d4edda !important;
         border: 2px solid #28a745;
         border-radius: 8px;
         padding: 16px;
         margin: 12px 0;
     }
+    .success, .success strong, .success span, .success p {
+        color: #000000 !important;
+    }
 
-    /* Big metric */
+    /* Metrics - RED numbers on WHITE */
     .metric {
-        background: white;
-        border: 2px solid #ddd;
+        background: #ffffff !important;
+        border: 2px solid #cccccc;
         border-radius: 8px;
         padding: 20px;
         text-align: center;
@@ -88,14 +105,14 @@ st.markdown("""
     }
     .metric-label {
         font-size: 14px;
-        color: #666 !important;
+        color: #333333 !important;
         text-transform: uppercase;
     }
 
-    /* Fix Streamlit elements */
+    /* Buttons - WHITE text on RED */
     .stButton > button {
         background: #c62828 !important;
-        color: white !important;
+        color: #ffffff !important;
         border: none !important;
         padding: 12px 24px !important;
         font-size: 16px !important;
@@ -103,15 +120,28 @@ st.markdown("""
     }
     .stButton > button:hover {
         background: #a52020 !important;
+        color: #ffffff !important;
     }
     .stButton > button:disabled {
-        background: #ccc !important;
-        color: #666 !important;
+        background: #888888 !important;
+        color: #ffffff !important;
     }
 
-    /* Sidebar */
-    [data-testid="stSidebar"] { background: #f8f9fa; }
-    [data-testid="stSidebar"] * { color: #1a1a1a !important; }
+    /* Sidebar - BLACK text on WHITE */
+    [data-testid="stSidebar"] {
+        background: #f5f5f5 !important;
+    }
+    [data-testid="stSidebar"] * {
+        color: #000000 !important;
+    }
+
+    /* File uploader */
+    [data-testid="stFileUploader"] {
+        background: #ffffff !important;
+    }
+    [data-testid="stFileUploader"] * {
+        color: #000000 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -230,15 +260,26 @@ with col2:
         status.info("🔍 Scanning for debris...")
 
         results = {}
+        # Better prompts for hurricane debris detection
         prompts = []
         if detect_debris:
-            prompts.extend([("pile of debris", "Debris"), ("trash pile", "Trash")])
+            prompts.extend([
+                ("pile of garbage on street", "Street Debris"),
+                ("heap of broken wood and materials", "Material Piles"),
+                ("scattered debris near houses", "Yard Debris"),
+            ])
         if detect_rubble:
-            prompts.extend([("rubble", "Rubble"), ("construction debris", "Construction")])
+            prompts.extend([
+                ("broken concrete and bricks", "Rubble"),
+                ("demolished building materials", "Construction"),
+            ])
         if detect_tarps:
-            prompts.append(("blue tarp", "Blue Tarps"))
+            prompts.extend([
+                ("blue tarp on roof", "Blue Tarps"),
+                ("blue plastic sheet covering damage", "Tarped Roofs"),
+            ])
         if detect_vehicles:
-            prompts.append(("damaged vehicle", "Vehicles"))
+            prompts.append(("overturned car", "Vehicles"))
 
         for i, (prompt, name) in enumerate(prompts):
             status.info(f"🔍 Detecting: {name}...")
